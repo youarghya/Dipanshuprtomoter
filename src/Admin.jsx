@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useStore, uid, useHashRoute } from './store.jsx';
+import { assetUrl } from './env.js';
 import { THEME_PRESETS, defaultData } from './data.js';
 import './admin.css';
 
@@ -348,7 +349,7 @@ function Login() {
       <div className="login">
         <aside className="login-aside">
           <a className="login-brand" href="#home">
-            <img src={data.brand.logo} alt="" />
+            <img src={assetUrl(data.brand.logo)} alt="" />
             <span>
               <b>{data.brand.name}</b>
               <small>{data.brand.sub}</small>
@@ -657,7 +658,7 @@ function OverviewPage({ navigate }) {
           </div>
           <div className="a-card-body" style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' }}>
             <img
-              src={featured.img}
+              src={assetUrl(featured.img)}
               alt=""
               style={{ width: 110, height: 74, objectFit: 'cover', borderRadius: 10 }}
             />
@@ -791,7 +792,7 @@ function ProjectForm({ initial, defaultN, onClose, onSave }) {
 
           {form.img ? (
             <div className="img-preview full">
-              <img src={form.img} alt="Project cover preview" />
+              <img src={assetUrl(form.img)} alt="Project cover preview" />
               <span>Cover preview</span>
             </div>
           ) : null}
@@ -921,7 +922,7 @@ function ProjectsPage({ toast }) {
                   <tr key={p.id}>
                     <td>
                       <div className="project-row">
-                        <img src={p.img} alt="" />
+                        <img src={assetUrl(p.img)} alt="" />
                         <div>
                           <b>{p.title}</b>
                           <span>{p.location || '—'} · {p.type || '—'}</span>
@@ -1762,11 +1763,11 @@ function ContentPage({ toast }) {
                 <input type="text" value={brand.banner} onChange={(e) => updateField('brand', 'banner', e.target.value)} />
               </Field>
               <div className="img-preview">
-                <img src={brand.logo} alt="Brand logo preview" />
+                <img src={assetUrl(brand.logo)} alt="Brand logo preview" />
                 <span>Logo preview</span>
               </div>
               <div className="img-preview">
-                <img src={brand.banner} alt="Footer banner preview" />
+                <img src={assetUrl(brand.banner)} alt="Footer banner preview" />
                 <span>Banner preview</span>
               </div>
             </div>
@@ -2559,7 +2560,7 @@ function AdminShell() {
       <div className="admin-shell">
         <aside className={`side ${menuOpen ? 'open' : ''}`}>
           <a className="side-brand" href="#/admin/overview" onClick={() => setMenuOpen(false)}>
-            <img src={data.brand.logo} alt="" />
+            <img src={assetUrl(data.brand.logo)} alt="" />
             <span>
               <b>{data.brand.name}</b>
               <small>{data.brand.sub}</small>

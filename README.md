@@ -117,6 +117,41 @@ Open the website at the printed URL. Open the console at:
 http://localhost:5173/#/admin
 ```
 
+## Environment configuration
+
+Configuration is layered, standard Vite style:
+
+| File | Committed | Purpose |
+| --- | --- | --- |
+| `.env` | no | Your local overrides (git-ignored) |
+| `.env.development` | yes | Development defaults |
+| `.env.production` | yes | Production defaults (GitHub Pages) |
+| `.env.example` | yes | Documented reference for every variable |
+
+Precedence, highest last: `.env` → `.env.[mode]` → `.env.[mode].local`.
+
+### Variables
+
+| Variable | Default | Purpose |
+| --- | --- | --- |
+| `VITE_SITE_URL` | `http://localhost:5173` | Origin of the deployed site (no path). Used for `canonical` and `og:url`. |
+| `VITE_BASE_PATH` | `/` | Path the app is served from. Use `/Dipanshuprtomoter/` for a GitHub Pages project site. |
+| `VITE_GA_MEASUREMENT_ID` | empty | Google Analytics 4 ID. Empty loads no analytics. Respects Do Not Track. |
+
+The app reads these through `src/env.js`, and `vite.config.js` applies the base path
+at build time. Public asset paths are resolved with `assetUrl()` so they keep working
+under a subfolder.
+
+> **Security:** every `VITE_*` value is compiled into the public JavaScript bundle.
+> Never put private API keys, passwords, or tokens in any `.env` file. Those belong on
+> a server.
+
+### Deploying to GitHub Pages
+
+`.env.production` already targets `https://youarghya.github.io/Dipanshuprtomoter/`.
+If you deploy to a domain root instead, set `VITE_BASE_PATH=/` and update
+`VITE_SITE_URL` before building.
+
 ## Production build
 
 ```bash

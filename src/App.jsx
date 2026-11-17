@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useStore, uid } from './store.jsx';
+import { assetUrl, canonicalUrl } from './env.js';
 
 const NAV = [
   ['Projects', '#projects'],
@@ -154,6 +155,27 @@ export default function App() {
   }, []);
 
   useEffect(() => {
+    const href = canonicalUrl();
+    if (!href) return;
+
+    let canonical = document.head.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', href);
+
+    let ogUrl = document.head.querySelector('meta[property="og:url"]');
+    if (!ogUrl) {
+      ogUrl = document.createElement('meta');
+      ogUrl.setAttribute('property', 'og:url');
+      document.head.appendChild(ogUrl);
+    }
+    ogUrl.setAttribute('content', href);
+  }, []);
+
+  useEffect(() => {
     const onScroll = () => {
       const doc = document.documentElement;
       setScrolled(window.scrollY > 24);
@@ -208,7 +230,7 @@ export default function App() {
         <div className="wrap">
           <div className="nav-shell">
             <a className="brand" href="#home" onClick={() => setMenu(false)}>
-              <span className="brand-mark"><img src={brand.logo} alt="" /></span>
+              <span className="brand-mark"><img src={assetUrl(brand.logo)} alt="" /></span>
               <span className="brand-name">{brand.name}<small>{brand.sub}</small></span>
             </a>
 
@@ -238,7 +260,7 @@ export default function App() {
         <section className="hero" id="home">
           <div
             className="hero-bg"
-            style={hero.image ? { backgroundImage: `url("${hero.image}")` } : undefined}
+            style={hero.image ? { backgroundImage: `url("${assetUrl(hero.image)}")` } : undefined}
             aria-hidden="true"
           />
           <div className="hero-overlay" aria-hidden="true" />
@@ -270,7 +292,7 @@ export default function App() {
             {featured ? (
               <a className="hero-project" href="#featured">
                 <span className="hero-project-img">
-                  <img src={featured.img || IMG_FALLBACK} alt="" />
+                  <img src={assetUrl(featured.img) || IMG_FALLBACK} alt="" />
                 </span>
                 <span className="hero-project-copy">
                   <span>{projectsSection.featuredLabel}</span>
@@ -314,7 +336,7 @@ export default function App() {
             <div className="wrap">
               <Reveal className="featured-panel">
                 <div className="featured-media">
-                  <img src={featured.img || IMG_FALLBACK} alt={featured.title} />
+                  <img src={assetUrl(featured.img) || IMG_FALLBACK} alt={featured.title} />
                   <span className="featured-flag">{projectsSection.featuredLabel}</span>
                   <span className="featured-index">
                     {featured.n || '01'} / {String(PROJECTS.length).padStart(2, '0')}
@@ -382,7 +404,7 @@ export default function App() {
                       className="project-image"
                       onClick={() => setActive(p)}
                     >
-                      <img src={p.img || IMG_FALLBACK} alt={p.title} loading="lazy" />
+                      <img src={assetUrl(p.img) || IMG_FALLBACK} alt={p.title} loading="lazy" />
                       <span className="project-shade" aria-hidden="true" />
                       <span className="project-status">{p.status}</span>
                       <span className="project-tag">{p.n}</span>
@@ -426,7 +448,7 @@ export default function App() {
 
             <div className="bento">
               <Reveal className="bento-img">
-                <img src={about.image} alt="Architect drawing building plans on a drafting table" />
+                <img src={assetUrl(about.image)} alt="Architect drawing building plans on a drafting table" />
                 <div className="bento-img-shade" aria-hidden="true" />
                 <div className="bento-caption">
                   <span>{about.captionTag}</span>
@@ -637,7 +659,7 @@ export default function App() {
         <div className="wrap">
           <div className="footer-top-row">
             <a className="brand footer-brand" href="#home">
-              <span className="brand-mark"><img src={brand.logo} alt="" /></span>
+              <span className="brand-mark"><img src={assetUrl(brand.logo)} alt="" /></span>
               <span className="brand-name">{brand.name}<small>{brand.sub}</small></span>
             </a>
             <p><Lines text={footer.tagline} /></p>
@@ -645,7 +667,7 @@ export default function App() {
           </div>
 
           <div className="footer-wordmark" aria-hidden="true">
-            <img src={brand.banner} alt="" />
+            <img src={assetUrl(brand.banner)} alt="" />
           </div>
 
           <div className="footer-bottom">
@@ -679,7 +701,7 @@ export default function App() {
             </button>
 
             <div className="project-modal-media">
-              <img src={active.img || IMG_FALLBACK} alt={active.title} />
+              <img src={assetUrl(active.img) || IMG_FALLBACK} alt={active.title} />
               <span className="project-status">{active.status}</span>
             </div>
 
